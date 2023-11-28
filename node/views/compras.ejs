@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Carrinho</title>
+    <link rel="stylesheet" href="../arquivos/compras/style.css">
+    
+    
+
+</head>
+<body>
+
+    <div class="cart">
+        <h1>Carrinho de Compras</h1>
+        <img src="../arquivos/compras/bigMac.avif" alt="big mac" width="230px">
+        <div class="item-details">
+            <h2>Big Mac</h2>
+            <p>Dois hambúrgueres (100% carne bovina), alface americana,
+            queijo sabor cheddar, molho especial, cebola, 
+            picles e pão com gergelim.</p>
+            <p>Preço: R$10.99</p>
+        </div>
+        <div class="item-quantity">
+            <select name="quantity" id="quantity1">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+            <button class="add-button" onclick="adicionarItem(10.99, 'quantity1', 'Big Mac')">Adicionar</button>
+            <button class="remove-button" onclick="removerItem(10.99, 'quantity1', 'Big Mac')">Remover</button>
+        </div>
+    </div>
+
+<div class="cart">
+    <img src="../arquivos/compras/macFritas.jpg" alt="McFritas Cheddar Bacon" width="230px">
+    <div class="item-details">
+        <h2>McFritas Cheddar Bacon</h2>
+        <p>A batata frita mais famosa do mundo, 
+        agora com melt sabor cheddar e bacon crispy. Não dá para resistir, 
+        experimente!</p>
+        <p>Preço: R$7.99</p>
+    </div>
+    <div class="item-quantity">
+        <input type="number" id="quantity2" value="1">
+        <button class="add-button" onclick="adicionarItem(7.99, 'quantity2', 'McFritas Cheddar Bacon')">Adicionar</button>
+        <button class="remove-button" onclick="removerItem(7.99, 'quantity2', 'McFritas Cheddar Bacon')">Remover</button>
+    </div>
+</div>
+
+<div class="cart">
+    <img src="../arquivos/compras/mcMelt.avif" alt="McMelt The Town" width="230px">
+    <div class="item-details">
+        <h2>McMelt The Town</h2>
+        <p>Composto por um hambúrguer (100% carne bovina), molho cremoso sabor cheddar, onion rings e pão escuro com gergelim. 
+        Sanduíche com sabor único que só o Melt do Méqui e as nossas onion rings podem oferecer.</p>
+        <p>Preço: R$15.99</p>
+    </div>
+    <div class="item-quantity">
+        <input type="number" id="quantity3" value="1">
+        <button class="add-button" onclick="adicionarItem(15.99, 'quantity3', 'McMelt The Town')">Adicionar</button>
+        <button class="remove-button" onclick="removerItem(15.99, 'quantity3', 'McMelt The Town')">Remover</button>
+    </div>
+</div>
+
+<div class="cart">
+    <img src="../arquivos/compras/mcChicken.jpg" alt="McChicken Bacon" width="230px">
+    <div class="item-details">
+        <h2>McChicken Bacon</h2>
+        <p>Frango empanado, maionese, bacon, alface americana e pão com gergelim.</p>
+        <p>Preço: R$10.99</p>
+    </div>
+    <div class="item-quantity">
+        <input type="number" id="quantity4" value="1">
+        <button class="add-button" onclick="adicionarItem(10.99, 'quantity4', 'McChicken Bacon')">Adicionar</button>
+        <button class="remove-button" onclick="removerItem(10.99, 'quantity4', 'McChicken Bacon')">Remover</button>
+    </div>
+</div>
+
+<form action="/finalizarCompra" method="post">
+    <div class="cart-summary">
+        <p>Total: R$<span id="total-value">0.00</span></p>
+        <button type="submit" class="checkout-button">Finalizar Compra</button>
+    </div>
+</form>
+<script>
+    
+    async function adicionarItem(preco, quantityId, nome) {
+    const quantidade = parseInt(document.getElementById(quantityId).value);
+
+    const formData = new FormData();
+    formData.append('nome', nome);
+    formData.append('descricao', 'Descrição do item');
+    formData.append('preco', preco);
+    formData.append('quantidade', quantidade);
+
+    // Exibir o valor do parâmetro nome
+    console.log('nome:', nome);
+
+    fetch('/adicionarItem', {
+        method: 'POST',
+        body: formData,
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log('Item adicionado com sucesso!');
+
+            // Atualiza o valor total do carrinho
+            const total = 0;
+            for (const item of document.querySelectorAll('.cart')) {
+                const preco = parseFloat(item.querySelector('.item-details .price').textContent);
+                const quantidade = parseInt(item.querySelector('.item-quantity .select option:selected').value);
+
+                total += preco * quantidade;
+            }
+
+            document.querySelector('#total-value').textContent = total.toFixed(2);
+        } else {
+            console.error('Erro ao adicionar item:', response.statusText);
+        }
+    })
+    .catch(error => {
+        console.error('Erro ao adicionar item:', error.message);
+    });
+}
+
+
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+    
+    const quantityId = 'quantity1';
+
+    
+    document.addEventListener('DOMContentLoaded', () => {
+    const addButton1 = document.getElementById('addButton1');
+    addButton1.addEventListener('click', () => {
+        adicionarItem(10.99, quantityId);
+    });
+});
+});
+</script>
+
+
+</body>
+</html>
